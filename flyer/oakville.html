@@ -1,11 +1,15 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-  <title>Weekly Flyer | United Supermarkets</title>
+  <title>Weekly Flyer – Oakville | United Supermarkets</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="/assets/css/main.css" />
   <noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+  <style>
+    .flyer-embed { width: 100%; min-height: 80vh; border: none; border-radius: 4px; }
+    .flyer-actions { margin-bottom: 1rem; }
+  </style>
 </head>
 
 <body class="is-preload">
@@ -26,6 +30,7 @@
         <nav>
           <ul>
             <li><a href="/">Home</a></li>
+            <li><a href="index.html">Weekly Flyer</a></li>
           </ul>
         </nav>
 
@@ -37,22 +42,18 @@
       <div class="inner">
 
         <header class="major">
-          <h1>Weekly Flyer</h1>
+          <h1>Weekly Flyer – Oakville</h1>
           <p><strong>Valid Feb 13 – Feb 19, 2026</strong></p>
         </header>
 
         <section class="box">
-          <h2>Oakville Location Flyer</h2>
-          <p>Valid Feb 13 – Feb 19, 2026</p>
-          <a href="oakville.html" class="button primary">View Oakville Flyer</a>
-          <a href="/flyers/weekly-oakville.pdf" class="button icon solid fa-file-pdf">Download PDF</a>
-        </section>
-
-        <section class="box">
-          <h2>London Location Flyer</h2>
-          <p>Valid Feb 13 – Feb 19, 2026</p>
-          <a href="london.html" class="button primary">View London Flyer</a>
-          <a href="/flyers/weekly-london.pdf" class="button icon solid fa-file-pdf">Download PDF</a>
+          <div class="flyer-actions">
+            <a href="/flyers/weekly-oakville.pdf" class="button primary icon solid fa-file-pdf" download>
+              Download Oakville Flyer (PDF)
+            </a>
+            <a href="index.html" class="button icon solid fa-arrow-left">All Flyers</a>
+          </div>
+          <iframe class="flyer-embed" src="/flyers/weekly-oakville.pdf" title="Oakville Weekly Flyer (PDF)"></iframe>
         </section>
 
       </div>
