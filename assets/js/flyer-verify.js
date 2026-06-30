@@ -1,29 +1,22 @@
 /**
- * Verify flyer/london.pdf is live on the custom domain after GitHub Pages deploy.
+ * Verify flyer PDFs are live on the custom domain after GitHub Pages deploy.
  */
 (function () {
-  var PDF_PATH = "/flyer/london.pdf";
   var CUSTOM_DOMAIN = "https://unitedsupermarkets.ca";
-  var GITHUB_IO_URL =
-    "https://unitedsupermarket0-dev.github.io/unitedsupermarkets/flyer/london.pdf";
-
-  var verifyButton = document.getElementById("verify-button");
-  var statusEl = document.getElementById("verify-status");
-  var metaEl = document.getElementById("verify-meta");
-  var previewEl = document.getElementById("pdf-preview");
-
-  if (!verifyButton) return;
-
-  function setStatus(message, type) {
-    statusEl.textContent = message;
-    statusEl.className = "verify-status is-visible is-" + type;
-  }
+  var GITHUB_IO_BASE =
+    "https://unitedsupermarket0-dev.github.io/unitedsupermarkets";
 
   function formatBytes(bytes) {
     if (!bytes || bytes < 0) return "unknown";
     if (bytes < 1024) return bytes + " B";
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
     return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+  }
+
+  function setStatus(el, message, type) {
+    if (!el) return;
+    el.textContent = message;
+    el.className = "verify-status is-visible is-" + type;
   }
 
   function checkUrl(label, url) {
@@ -43,17 +36,25 @@
     });
   }
 
-  function runVerify() {
-    metaEl.textContent = "";
-    verifyButton.disabled = true;
-    setStatus("Checking live PDF URLs…", "info");
+  function runVerify(options) {
+    var pdfPath = options.pdfPath;
+    var button = options.button;
+    var statusEl = options.statusEl;
+    var metaEl = options.metaEl;
+    var previewEl = options.previewEl;
+    var successMessage = options.successMessage;
 
-    var customUrl = CUSTOM_DOMAIN + PDF_PATH;
-    var relativeUrl = PDF_PATH + "?t=" + Date.now();
+    metaEl.textContent = "";
+    button.disabled = true;
+    setStatus(statusEl, "Checking live PDF URLs…", "info");
+
+    var customUrl = CUSTOM_DOMAIN + pdfPath;
+    var githubUrl = GITHUB_IO_BASE + pdfPath;
+    var relativeUrl = pdfPath + "?t=" + Date.now();
 
     Promise.all([
       checkUrl("Custom domain", customUrl),
-      checkUrl("GitHub Pages", GITHUB_IO_URL)
+      checkUrl("GitHub Pages", githubUrl)
     ])
       .then(function (results) {
         var custom = results[0];
@@ -72,32 +73,53 @@
         metaEl.textContent = lines.join("\n");
 
         if (custom.ok && custom.type.indexOf("pdf") !== -1) {
-          setStatus(
-            "Success — " + customUrl + " is live (HTTP 200, PDF). Flipp can use this URL.",
-            "success"
-          );
-          if (previewEl) {
-            previewEl.src = relativeUrl;
-          }
+          setStatus(statusEl, successMessage || ("Success — " + customUrl + " is live (HTTP 200, PDF)."), "success");
+          if (previewEl) previewEl.src = relativeUrl;
         } else if (github.ok) {
           setStatus(
+            statusEl,
             "PDF is on GitHub Pages but custom domain check failed. DNS or CNAME may still be propagating.",
             "error"
           );
         } else {
-          setStatus(
-            "PDF not found yet. Wait ~1 minute after publish, then check again.",
-            "error"
-          );
+          setStatus(statusEl, "PDF not found yet. Wait ~1 minute after publish, then check again.", "error");
         }
       })
       .catch(function (err) {
-        setStatus("Could not verify: " + (err.message || "network error"), "error");
+        setStatus(statusEl, "Could not verify: " + (err.message || "network error"), "error");
       })
       .finally(function () {
-        verifyButton.disabled = false;
+        button.disabled = false;
       });
   }
 
-  verifyButton.addEventListener("click", runVerify);
+  var londonButton = document.getElementById("verify-button");
+  if (londonButton) {
+    londonButton.addEventListener("click", function () {
+      runVerify({
+        pdfPath: "/flyer/london.pdf",
+        button: londonButton,
+        statusEl: document.getElementById("verify-status"),
+        metaEl: document.getElementById("verify-meta"),
+        previewEl: document.getElementById("pdf-preview"),
+        successMessage:
+          "Success — https://unitedsupermarkets.ca/flyer/london.pdf is live (HTTP 200, PDF). Flipp can use this URL."
+      });
+    });
+  }
+
+  var testButton = document.getElementById("verify-test-button");
+  if (testButton) {
+    testButton.addEventListener("click", function () {
+      runVerify({
+        pdfPath: "/flyer/test-upload.pdf",
+        button: testButton,
+        statusEl: document.getElementById("verify-test-status"),
+        metaEl: document.getElementById("verify-test-meta"),
+        previewEl: document.getElementById("test-pdf-preview"),
+        successMessage:
+          "Success — https://unitedsupermarkets.ca/flyer/test-upload.pdf is live (HTTP 200, PDF)."
+      });
+    });
+  }
 })();

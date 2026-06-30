@@ -103,7 +103,22 @@
         </section>
 
         <section class="box">
-          <h2>Live deploy check</h2>
+          <h2>Test upload (desktop app sandbox)</h2>
+          <p>
+            The desktop team can publish test PDFs to <code>flyer/test-upload.pdf</code> before going live on
+            <code>flyer/london.pdf</code>.
+          </p>
+          <ul class="actions">
+            <li><a href="test-upload.pdf" class="button primary icon solid fa-file-pdf" target="_blank" rel="noopener">Open test-upload.pdf</a></li>
+            <li><button type="button" class="button" id="verify-test-button">Check test PDF</button></li>
+          </ul>
+          <div id="verify-test-status" class="verify-status" role="status" aria-live="polite"></div>
+          <p id="verify-test-meta" class="verify-meta"></p>
+          <iframe class="flyer-embed" id="test-pdf-preview" src="test-upload.pdf" title="Test upload PDF"></iframe>
+        </section>
+
+        <section class="box">
+          <h2>Live deploy check (London)</h2>
           <p>After publishing from the desktop app, wait ~1 minute, then verify the PDF is served on the custom domain.</p>
           <ul class="actions">
             <li><button type="button" class="button primary" id="verify-button">Check live PDF</button></li>
