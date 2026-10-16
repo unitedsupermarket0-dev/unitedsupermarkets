@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <title>Publisher Setup | United Supermarkets</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body class="is-preload admin-shell">
+  <div id="wrapper">
+    <header id="header">
+      <div class="inner">
+        <a href="/" class="logo">
+          <span class="symbol"><img src="/images/logo.svg" alt="United Supermarkets" /></span>
+          <span class="title">United Supermarkets</span>
+        </a>
+        <nav>
+          <ul>
+            <li><a href="/admin/">Staff login</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="inner">
+        <div class="admin-card" style="max-width:36rem">
+          <h1>Publisher setup</h1>
+          <p class="lede">
+            One-time setup for this computer. Store a fine-grained GitHub token so staff can
+            replace flyer PDFs after they sign in. The token stays in this browser only.
+          </p>
+
+          <ol class="admin-rules" style="margin-bottom:1.25rem">
+            <li>Create a fine-grained PAT for <code>unitedsupermarket0-dev/unitedsupermarkets</code>.</li>
+            <li>Grant <strong>Contents: Read and write</strong> on branch <code>main</code>.</li>
+            <li>Paste the token below and save.</li>
+          </ol>
+
+          <form id="setup-form">
+            <div class="admin-field">
+              <label for="token">GitHub publish token</label>
+              <input type="password" id="token" name="token" autocomplete="off" placeholder="github_pat_…" />
+            </div>
+            <ul class="actions">
+              <li><button type="submit" class="button primary">Save on this computer</button></li>
+              <li><button type="button" class="button" id="clear-btn">Clear saved token</button></li>
+            </ul>
+          </form>
+
+          <div id="status" class="admin-status" role="status" aria-live="polite"></div>
+          <p class="admin-muted">Staff still need their location username and password to sign in.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer id="footer">
+      <div class="inner">
+        <ul class="copyright">
+          <li>&copy; United Supermarkets</li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/admin/config.js"></script>
+  <script src="/assets/js/admin-auth.js"></script>
+  <script>
+    (function () {
+      var statusEl = document.getElementById("status");
+      var tokenInput = document.getElementById("token");
+
+      function showStatus(type, message) {
+        statusEl.className = "admin-status is-visible is-" + type;
+        statusEl.textContent = message;
+      }
+
+      if (UnitedAdminAuth.getPublishToken()) {
+        showStatus("ok", "A publish token is already saved in this browser.");
+      }
+
+      document.getElementById("setup-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        var token = tokenInput.value.trim();
+        if (!token) {
+          showStatus("err", "Paste a GitHub token first.");
+          return;
+        }
+        UnitedAdminAuth.setPublishToken(token);
+        tokenInput.value = "";
+        showStatus("ok", "Token saved on this computer. Staff can publish from the dashboard.");
+      });
+
+      document.getElementById("clear-btn").addEventListener("click", function () {
+        UnitedAdminAuth.setPublishToken("");
+        showStatus("info", "Saved token cleared from this browser.");
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -45,3 +45,13 @@ Fine-grained personal access token on **unitedsupermarket0-dev/unitedsupermarket
 - Commit on `main` updates `flyer/london.pdf`
 - https://unitedsupermarkets.ca/flyer/london.pdf returns **200** and opens the PDF
 - URL unchanged week to week
+
+## Staff web admin
+
+Store employees can also replace flyers in the browser:
+
+- Login: https://unitedsupermarkets.ca/admin/
+- Setup (GitHub publish token on each store computer): https://unitedsupermarkets.ca/admin/setup.html
+- Details & default credentials: `admin/SETUP.md`
+
+Accounts are location-scoped (`london` / `oakville`). Staff can preview and replace their flyer only; delete is not offered so a live PDF always remains.

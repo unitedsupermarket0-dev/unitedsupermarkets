@@ -1,0 +1,171 @@
+/* Admin flyer console — extends Phantom theme */
+
+.admin-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at top left, rgba(242, 152, 34, 0.12), transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(35, 112, 74, 0.1), transparent 45%),
+    #f7f5f1;
+}
+
+.admin-shell #wrapper {
+  background: transparent;
+}
+
+.admin-card {
+  max-width: 28rem;
+  margin: 3rem auto;
+  padding: 2rem 1.75rem;
+  background: #fff;
+  border: solid 1px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+}
+
+.admin-card h1 {
+  font-size: 1.6rem;
+  margin-bottom: 0.35rem;
+}
+
+.admin-card .lede {
+  color: #666;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.admin-dash {
+  max-width: 56rem;
+  margin: 0 auto 3rem;
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-badge {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  background: #235;
+  color: #fff;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.admin-panel {
+  background: #fff;
+  border: solid 1px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.admin-panel h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.admin-note {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.5rem 0 1rem;
+}
+
+.admin-flyer-frame {
+  width: 100%;
+  min-height: 70vh;
+  border: solid 1px rgba(0, 0, 0, 0.1);
+  background: #eee;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.admin-status {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  display: none;
+}
+
+.admin-status.is-visible {
+  display: block;
+}
+
+.admin-status.is-ok {
+  background: #e8f6ee;
+  color: #1d5c38;
+  border: solid 1px #b7dfc6;
+}
+
+.admin-status.is-err {
+  background: #fdecea;
+  color: #8a1f11;
+  border: solid 1px #f5c2c0;
+}
+
+.admin-status.is-info {
+  background: #eef3f8;
+  color: #1f3a56;
+  border: solid 1px #c5d4e4;
+}
+
+.admin-field {
+  margin-bottom: 1rem;
+}
+
+.admin-field label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}
+
+.admin-field input[type="text"],
+.admin-field input[type="password"],
+.admin-field input[type="file"] {
+  width: 100%;
+}
+
+.admin-muted {
+  color: #777;
+  font-size: 0.85rem;
+}
+
+.admin-footer-link {
+  opacity: 0.45;
+  font-size: 0.8rem;
+}
+
+.admin-footer-link:hover {
+  opacity: 0.9;
+}
+
+.admin-rules {
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.admin-rules li {
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+@media screen and (max-width: 736px) {
+  .admin-card {
+    margin: 1.5rem 0.75rem;
+  }
+
+  .admin-flyer-frame {
+    min-height: 50vh;
+  }
+}

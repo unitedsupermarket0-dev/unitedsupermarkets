@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <title>Staff Admin | United Supermarkets</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body class="is-preload admin-shell">
+  <div id="wrapper">
+    <header id="header">
+      <div class="inner">
+        <a href="/" class="logo">
+          <span class="symbol"><img src="/images/logo.svg" alt="United Supermarkets" /></span>
+          <span class="title">United Supermarkets</span>
+        </a>
+        <nav>
+          <ul>
+            <li><a href="/">Home</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="inner">
+        <div class="admin-card">
+          <h1>Staff Admin</h1>
+          <p class="lede">Sign in with your store credentials to update that location’s weekly flyer.</p>
+
+          <form id="login-form" novalidate>
+            <div class="admin-field">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" autocomplete="username" required placeholder="london or oakville" />
+            </div>
+            <div class="admin-field">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" autocomplete="current-password" required />
+            </div>
+            <ul class="actions">
+              <li><button type="submit" class="button primary">Sign in</button></li>
+            </ul>
+          </form>
+
+          <div id="status" class="admin-status" role="status" aria-live="polite"></div>
+          <p class="admin-muted">Each store account can only change its own flyer. The live flyer cannot be removed.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer id="footer">
+      <div class="inner">
+        <ul class="copyright">
+          <li>&copy; United Supermarkets</li>
+          <li><a class="admin-footer-link" href="/admin/setup.html">Publisher setup</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/admin/config.js"></script>
+  <script src="/assets/js/admin-auth.js"></script>
+  <script>
+    (function () {
+      var statusEl = document.getElementById("status");
+      var form = document.getElementById("login-form");
+
+      function showStatus(type, message) {
+        statusEl.className = "admin-status is-visible is-" + type;
+        statusEl.textContent = message;
+      }
+
+      if (UnitedAdminAuth.getSession()) {
+        window.location.replace("/admin/dashboard.html");
+        return;
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        showStatus("info", "Signing in…");
+        UnitedAdminAuth.login(username, password).then(function (result) {
+          if (!result.ok) {
+            showStatus("err", result.error);
+            return;
+          }
+          window.location.replace("/admin/dashboard.html");
+        }).catch(function () {
+          showStatus("err", "Sign-in failed. Try again.");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

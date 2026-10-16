@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <title>Flyer Admin | United Supermarkets</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body class="is-preload admin-shell">
+  <div id="wrapper">
+    <header id="header">
+      <div class="inner">
+        <a href="/" class="logo">
+          <span class="symbol"><img src="/images/logo.svg" alt="United Supermarkets" /></span>
+          <span class="title">United Supermarkets</span>
+        </a>
+        <nav>
+          <ul>
+            <li><a href="/" id="nav-home">Home</a></li>
+            <li><a href="#" id="logout-link">Sign out</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="inner admin-dash">
+        <div class="admin-toolbar">
+          <div>
+            <h1 style="margin-bottom:0.35rem">Flyer Admin</h1>
+            <span class="admin-badge" id="location-badge">Location</span>
+          </div>
+          <div class="admin-actions">
+            <a class="button" id="public-page-link" href="#" target="_blank" rel="noopener">Open public page</a>
+            <button type="button" class="button" id="refresh-btn">Refresh preview</button>
+          </div>
+        </div>
+
+        <section class="admin-panel">
+          <h2>Current live flyer</h2>
+          <p class="admin-note">
+            This is the PDF shoppers see on the website. You can replace it with a new PDF,
+            but you cannot delete it — the site always needs one flyer live.
+          </p>
+          <iframe class="admin-flyer-frame" id="flyer-preview" title="Current live flyer PDF"></iframe>
+          <p class="admin-muted" style="margin-top:0.75rem">
+            Public URL: <a id="public-pdf-link" href="#" target="_blank" rel="noopener"></a>
+          </p>
+        </section>
+
+        <section class="admin-panel">
+          <h2>Replace flyer</h2>
+          <p class="admin-note">
+            Upload a new PDF for <strong id="location-name">this store</strong> only.
+            The previous file is overwritten at the same URL (GitHub Pages updates in about a minute).
+          </p>
+          <ul class="admin-rules">
+            <li>Only PDF files are accepted.</li>
+            <li>Delete is disabled — replace only.</li>
+            <li>You cannot change another location’s flyer from this account.</li>
+          </ul>
+
+          <form id="upload-form" style="margin-top:1.25rem">
+            <div class="admin-field">
+              <label for="flyer-file">New flyer PDF</label>
+              <input type="file" id="flyer-file" accept="application/pdf,.pdf" required />
+            </div>
+            <div class="admin-actions">
+              <button type="submit" class="button primary" id="publish-btn">Publish replacement</button>
+            </div>
+          </form>
+
+          <div id="status" class="admin-status" role="status" aria-live="polite"></div>
+        </section>
+      </div>
+    </div>
+
+    <footer id="footer">
+      <div class="inner">
+        <ul class="copyright">
+          <li>&copy; United Supermarkets</li>
+          <li><a class="admin-footer-link" href="/admin/setup.html">Publisher setup</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/admin/config.js"></script>
+  <script src="/assets/js/admin-auth.js"></script>
+  <script src="/assets/js/admin-flyer.js"></script>
+  <script>
+    (function () {
+      var auth = UnitedAdminAuth.requireSession();
+      if (!auth) return;
+
+      var location = auth.location;
+      var statusEl = document.getElementById("status");
+      var preview = document.getElementById("flyer-preview");
+      var publishBtn = document.getElementById("publish-btn");
+
+      document.getElementById("location-badge").textContent = location.label + " store";
+      document.getElementById("location-name").textContent = location.label;
+      document.getElementById("public-page-link").href = location.pageUrl;
+      document.getElementById("public-pdf-link").href = location.publicUrl;
+      document.getElementById("public-pdf-link").textContent =
+        UNITED_ADMIN_CONFIG.github.siteOrigin + location.publicUrl;
+
+      function showStatus(type, message) {
+        statusEl.className = "admin-status is-visible is-" + type;
+        statusEl.textContent = message;
+      }
+
+      function loadPreview() {
+        preview.src = UnitedAdminFlyer.cacheBustUrl(location.publicUrl);
+      }
+
+      document.getElementById("refresh-btn").addEventListener("click", function () {
+        loadPreview();
+        showStatus("info", "Preview refreshed.");
+      });
+
+      document.getElementById("logout-link").addEventListener("click", function (event) {
+        event.preventDefault();
+        UnitedAdminAuth.logout();
+        window.location.replace("/admin/");
+      });
+
+      document.getElementById("upload-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        var fileInput = document.getElementById("flyer-file");
+        var file = fileInput.files && fileInput.files[0];
+        var token = UnitedAdminAuth.getPublishToken();
+
+        if (!token) {
+          showStatus(
+            "err",
+            "Publish token is missing. Open Publisher setup, save the GitHub token on this computer, then try again."
+          );
+          return;
+        }
+
+        var validation = UnitedAdminFlyer.validatePdf(file);
+        if (validation) {
+          showStatus("err", validation);
+          return;
+        }
+
+        publishBtn.disabled = true;
+        showStatus("info", "Uploading and publishing… this may take a moment.");
+
+        UnitedAdminFlyer.replaceFlyer(location, file, token)
+          .then(function (result) {
+            showStatus(
+              "ok",
+              "Published. Live URL: " +
+                result.publicUrl +
+                " — allow about one minute for GitHub Pages to update, then refresh the preview."
+            );
+            fileInput.value = "";
+            window.setTimeout(loadPreview, 5000);
+          })
+          .catch(function (error) {
+            showStatus("err", error.message || "Publish failed.");
+          })
+          .then(function () {
+            publishBtn.disabled = false;
+          });
+      });
+
+      loadPreview();
+    })();
+  </script>
+</body>
+</html>
