@@ -14,9 +14,9 @@ window.UNITED_ADMIN_CONFIG = {
       id: "london",
       label: "London",
       username: "london",
-      // SHA-256 of the location password (see admin/SETUP.md)
+      // SHA-256 of the location password (not stored in the repo)
       passwordHash:
-        "5de8e9f5c2ee390df1eac7c89624afb123a6e37dee33a6a2a1e50949042e403f",
+        "f4a9328c5ac5edd298a339c96a1ecde82091ccf045080fcca3fdb032355fcda0",
       // Files replaced on publish (never deleted)
       paths: ["flyer/london.pdf", "flyers/weekly-london.pdf"],
       publicUrl: "/flyer/london.pdf",
@@ -27,7 +27,7 @@ window.UNITED_ADMIN_CONFIG = {
       label: "Oakville",
       username: "oakville",
       passwordHash:
-        "ee7fbd913896432f23899dd6ddd15b5c59c3a7093889151ad53603cd09bb9e46",
+        "4d88ee961eebe488ce2fc9bbcb9ae435fcfa8b26e175b6c9b7962efdbdc6b2d6",
       paths: ["flyers/weekly-oakville.pdf"],
       publicUrl: "/flyers/weekly-oakville.pdf",
       pageUrl: "/flyer/oakville.html"

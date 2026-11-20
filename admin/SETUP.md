@@ -4,12 +4,12 @@ Employees sign in at **https://unitedsupermarkets.ca/admin/** and can replace on
 
 ## Accounts (location-scoped)
 
-| Username  | Default password       | Can change                                      |
-|-----------|------------------------|-------------------------------------------------|
-| `london`  | `UnitedLondon2026!`    | `flyer/london.pdf`, `flyers/weekly-london.pdf`  |
-| `oakville`| `UnitedOakville2026!`  | `flyers/weekly-oakville.pdf`                    |
+| Username   | Can change                                     |
+|------------|------------------------------------------------|
+| `london`   | `flyer/london.pdf`, `flyers/weekly-london.pdf` |
+| `oakville` | `flyers/weekly-oakville.pdf`                   |
 
-Change passwords by updating the SHA-256 hashes in `admin/config.js`.
+Passwords are not stored in this repo. To change one, replace the SHA-256 hash in `admin/config.js`.
 
 Generate a new hash:
 
